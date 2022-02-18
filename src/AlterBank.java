@@ -25,12 +25,12 @@ public class AlterBank {
         int age;
     }
 
-    private static class SalaryOperation implements Operation {
+    private static class Salary {
         String month; /* month name*/
         int amount; /* how much money did you got*/
     }
 
-    private static class Condition implements Operation {
+    private static class Condition {
         boolean passportRequired;
         boolean needGuarantor;
     }
