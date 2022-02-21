@@ -10,37 +10,22 @@ public class AlterBank {
 
     public static void main(String[] args) {
 
-        List<Integer> l1 = new ArrayList<>();
-
-        l1.add(1);
-        l1.add(2);
-        l1.add(3);
-        l1.add(4);
-        l1.add(5);
-
-        ArrayList<Integer> l2 = new ArrayList<>(l1);
-
-
-        DebugTest debugTest = new DebugTest();
-        debugTest.method1();
-
-        PrimitiveTest primitiveTest = new PrimitiveTest();
-
         Certificate certificate = new Certificate("Google");
         certificate.addSalary(null);
         certificate.addSalary(new Salary(1000, TheMonth.MAY));
         certificate.addSalary(new Salary(1200, TheMonth.JUN));
         certificate.addSalary(new Salary(900, TheMonth.JUL));
 
+
         /* vasja*/
         Client vasjaDolznik = new Client("Vasja", 25);
         vasjaDolznik.certificate = certificate;
-        vasjaDolznik.passport = new Passport(Sex.MAN, "MC778822", "2030-05-05");
+        vasjaDolznik.passport = new Passport(Sex.MAN, "MC778822", 2023);
 
         /*petya*/
         Client petyaPorutchitel = new Client("Petya", 23);
         petyaPorutchitel.certificate = certificate;
-        petyaPorutchitel.passport = new Passport(Sex.I_DONT_KNOW, "MC112233", "2030-05-05");
+        petyaPorutchitel.passport = new Passport(Sex.I_DONT_KNOW, "MC112233", 2022);
 
     }
 
@@ -80,15 +65,29 @@ public class AlterBank {
         MAN, WOMAN, I_DONT_KNOW
     }
 
-    private static class Passport {
+    private static class Passport implements Validateable {
         private Sex sex;
         private String passportNumber;
-        private String expirationDate;
+        private int expirationDate;
 
-        public Passport(Sex sex, String passportNumber, String expirationDate) {
+        public Passport(Sex sex, String passportNumber, int expirationDate) {
             this.sex = sex;
             this.passportNumber = passportNumber;
             this.expirationDate = expirationDate;
+        }
+
+        @Override
+        public boolean validate() {
+            if (sex == null){
+                return false;
+            }
+            if (passportNumber == null){
+                return false;
+            }
+            if (expirationDate<2020){
+                return false;
+            }
+            else return true;
         }
     }
 
@@ -127,6 +126,7 @@ public class AlterBank {
         }
     }
 
+
     private static interface Operation {
 
         boolean check(Validateable validateable);
@@ -155,24 +155,5 @@ public class AlterBank {
 
     }
 
-    private static class DebugTest {
-
-        public void method1() {
-            method2();
-        }
-
-        public void method2() {
-            method3();
-        }
-
-        public void method3() {
-            method4();
-        }
-
-        public void method4() {
-
-        }
-
-    }
 }
 
