@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Practick {
 
@@ -7,69 +10,121 @@ public class Practick {
 
         Car car = new Car();
 
-        car.addPeredachi(new Peredachi("задняя", 10));
-        car.addPeredachi(new Peredachi("первая", 20));
-        car.addPeredachi(new Peredachi("вторая", 40));
-        car.addPeredachi(new Peredachi("третья", 60));
-        car.addPeredachi(new Peredachi("четвертая", 80));
-        car.addPeredachi(new Peredachi("пятая", 180));
+        car.addPeredachi(new Peredacha("задняя", 10));
+        car.addPeredachi(new Peredacha("первая", 20));
+        car.addPeredachi(new Peredacha("вторая", 40));
+        car.addPeredachi(new Peredacha("третья", 60));
+        car.addPeredachi(new Peredacha("четвертая", 80));
+        car.addPeredachi(new Peredacha("пятая", 180));
 
 
+        int maxSpeed = car.findMaxSpeed();
+        List<Integer> list = car.collectSpeeds();
 
-        car.findMaxSpeed();
-        System.out.println(car.maxSpeedAll);
+        System.out.println(maxSpeed);
+        System.out.println(list);
+
+        int sum = car.mkpp
+                .stream()
+                .mapToInt(peredacha -> peredacha.maxSpeed)
+                .sum();
+
+        List<String> names = car.mkpp
+                .stream()
+                .map(b -> b.description)
+                .collect(Collectors.toList());
+
+        System.out.println(names);
+
+        List<Peredacha> fastGears = car.mkpp
+                .stream()
+                .filter(peredacha -> peredacha.maxSpeed > 60)
+                .collect(Collectors.toList());
+
+        System.out.println("--------------");
+        System.out.println(fastGears);
+        System.out.println("--------------");
+
+        Optional<Peredacha> peredachaOptional = car.mkpp
+                .stream()
+                .filter(peredacha -> peredacha.description.equals("пятая"))
+                .findFirst();
+
+        if (peredachaOptional.isEmpty()) {
+            System.out.println("Нет такой передачи!");
+        } else {
+            System.out.println("Есть такая!!!");
+        }
+
+        boolean isPeredachaPresent = car.mkpp
+                .stream()
+                .anyMatch(peredacha -> peredacha.maxSpeed == 60 && peredacha.description.equals("третья"));
 
 
 
     }
 
-    public static class Peredachi {
+    public static class Peredacha {
         private String description;
-        private static int maxSpeed;
+        private int maxSpeed;
 
-        public Peredachi(String description, int maxSpeed) {
+        public Peredacha(String description, int maxSpeed) {
 
             this.description = description;
             this.maxSpeed = maxSpeed;
         }
 
-
+        @Override
+        public String toString() {
+            return "Peredacha{" +
+                    "description='" + description + '\'' +
+                    ", maxSpeed=" + maxSpeed +
+                    '}';
+        }
     }
 
     public static class Car {
 
+        public List<Peredacha> mkpp = new ArrayList<>();
 
-        public List<Peredachi> mkpp = new ArrayList<>();
-        public List<Integer> maxSpeedAll = new ArrayList<>();
-        public Peredachi peredachki;
+        public void addPeredachi(Peredacha peredacha) {
 
-
-        public void addPeredachi(Peredachi peredachki) {
-
-            if (peredachki != null) {
-                mkpp.add(peredachki);
+            if (peredacha != null) {
+                mkpp.add(peredacha);
             }
         }
 
-        int i;
-        int x = 0;
+
 
         public int findMaxSpeed() {
+            int result = 0;
 
-            int maxSpeed = Peredachi.maxSpeed;
-            if (maxSpeed != 0) {
-
-                for (i = 0; i < mkpp.size(); i++) {
-                    Peredachi maxSpeedFor1 = mkpp.get(i);
-                    x = maxSpeedFor1.maxSpeed;
-
+            for (Peredacha peredacha : mkpp) {
+                int maxSpeed = peredacha.maxSpeed;
+                if (maxSpeed > result) {
+                    result = maxSpeed;
                 }
-                maxSpeedAll.add(x);
-
             }
-           return x;
+
+            return result;
+        }
+
+        public List<Integer> collectSpeeds() {
+//            List<Integer> result = new ArrayList<>();
+//
+//            for (Peredacha peredacha : mkpp) {
+//                result.add(peredacha.maxSpeed);
+//            }
+//
+//            return result;
+
+            return mkpp.stream()
+                    .map(peredacha -> peredacha.maxSpeed)
+                    .collect(Collectors.toList());
         }
     }
+
+
 
 
 }
