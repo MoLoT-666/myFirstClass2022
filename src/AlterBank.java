@@ -84,7 +84,7 @@ public class AlterBank {
             if (passportNumber == null){
                 return false;
             }
-            if (expirationDate<2020){
+            if (expirationDate<=2020){
                 return false;
             }
             else return true;

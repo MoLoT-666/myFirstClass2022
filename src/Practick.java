@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Practick {
@@ -16,7 +15,10 @@ public class Practick {
         car.addPeredachi(new Peredachi("пятая", 180));
 
 
+
         car.findMaxSpeed();
+        System.out.println(car.maxSpeedAll);
+
 
 
     }
@@ -38,7 +40,9 @@ public class Practick {
 
 
         public List<Peredachi> mkpp = new ArrayList<>();
+        public List<Integer> maxSpeedAll = new ArrayList<>();
         public Peredachi peredachki;
+
 
         public void addPeredachi(Peredachi peredachki) {
 
@@ -48,23 +52,25 @@ public class Practick {
         }
 
         int i;
-        int x;
+        int x = 0;
 
-        public void findMaxSpeed() {
+        public int findMaxSpeed() {
 
             int maxSpeed = Peredachi.maxSpeed;
             if (maxSpeed != 0) {
 
                 for (i = 0; i < mkpp.size(); i++) {
-                    if (x < maxSpeed) {
-                        x = maxSpeed;
-                    }
+                    Peredachi maxSpeedFor1 = mkpp.get(i);
+                    x = maxSpeedFor1.maxSpeed;
+
                 }
+                maxSpeedAll.add(x);
+
             }
-            System.out.println(x);
-
-
+           return x;
         }
     }
+
+
 }
 
