@@ -54,9 +54,6 @@ public class BaseDataShop {
             else console.close();
 
 
-
-
-
             parts.addPart(new Part(Part.name, Part.brand, Part.price));
 
 
@@ -81,9 +78,6 @@ public class BaseDataShop {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
-
 
         }
     }
