@@ -2,6 +2,7 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,6 +13,7 @@ public class NewShopWithStream {
         Client bill = new Client("Bill", 43);
         ShopAutoparts shopAutopars = new ShopAutoparts();
         SallerMan max = new SallerMan("Max", 33);
+        Scanner scanner = new Scanner(System.in);
 
 
         shopAutopars.addTools(new Tool("тормоз", "German", 100));
@@ -24,22 +26,33 @@ public class NewShopWithStream {
         max.shop = shopAutopars;
         max.client = bill;
 
-        List<Tool> toolYoyNeed = shopAutopars.inStok.stream()
-                .filter(tool -> tool.nameTool.equals(bill.findTool))
-                .toList();
+        System.out.println("Введите неоходимую запчасть");
+
+        bill.findTool = scanner.nextLine();
+        if (!bill.findTool.equals(" ")) {
 
 
-        List<Tool> bestPriceInFierst = toolYoyNeed.stream()
-                .sorted(Comparator.comparing(tool -> tool.price))
-                .collect(Collectors.toList());
-        System.out.println(bestPriceInFierst);
+            List<Tool> toolYoyNeed = shopAutopars.inStok.stream()
+                    .filter(tool -> tool.nameTool.equals(bill.findTool))
+                    .toList();
 
+
+            List<Tool> bestPriceInFierst = toolYoyNeed.stream()
+                    .sorted(Comparator.comparing(tool -> tool.price))
+                    .collect(Collectors.toList());
+
+            if (bestPriceInFierst.size() > 0) {
+
+                System.out.println("Можем предложить для вас:");
+                System.out.println(bestPriceInFierst);
+            } else System.out.println("Нет такого у нас ваабще!!!");
+        } else System.out.println("Erorr...call Bruese Willys");
     }
 }
 
 class Client{
 
-    String findTool = "тормоз";
+    String findTool;
 
     private String name;
     private int age;
