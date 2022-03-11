@@ -1,7 +1,8 @@
 
 
 
-
+import lombok.Setter;
+import lombok.ToString;
 import org.w3c.dom.ls.LSOutput;
 
 import java.io.IOException;
@@ -9,100 +10,146 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class BaseDataShop {
+
     public static void main(String[] args) {
 
+        /*хранит ввод пользователя*/
+        String userInput;
 
-        Parts parts = new Parts();
+        List<Part> parts = new ArrayList<>();
 
+        int price;
 
-        Scanner console = new Scanner(System.in);
-
-        String name1;
-        String brand1;
-        int price1;
         String x = "exit";
 
+        /*цикл работает до тех пор пока пользователь не введет "exit"*/
+        do {
+            Scanner console = new Scanner(System.in);
 
-        System.out.println("Введите наименование запчасти, ее бренд и стоимость, для выхода введите exit");
+            /*сообщение*/
+            String errorMessage = null;
 
+            /*запчасть*/
+            Part part = new Part();
 
-        System.out.println("Введите имя запчасти:");
+            System.out.println("Введите наименование запчасти, ее бренд и стоимость, для выхода введите exit");
+            System.out.println("Введите имя запчасти:");
 
-        name1 = console.nextLine();
-            if (!name1.equals(x) & name1.equals(" ") & !name1.equals(" ")) {
-                Part.name = name1;
-                System.out.println("Введите производителя запчасти:");
+            userInput = console.nextLine();
 
-                brand1 = console.nextLine();
-                if (!brand1.equals(x) & brand1.equals(" ") & !brand1.equals(" ")) {
-                    Part.brand = brand1;
+            if (userInput.equals(x)) {
+                System.out.println("Пользователь завершил программу.");
+                break;
+            } else {
+                /*first step*/
+                if (validateString(userInput)) {
+                    part.setName(userInput);
+                    System.out.println("Введите производителя запчасти:");
 
-                    System.out.println("Введите цену запчасти:");
-                    price1 = console.nextInt();
-                    if (price1 != 0) {
-                        Part.price = price1;
+                    userInput = console.nextLine();
 
-                    System.out.println("Ваши данные успешно внесены.");
+                    /*second step*/
+                    if (validateString(userInput)) {
+                        part.setBrand(userInput);
+
+                        System.out.println("Введите цену запчасти:");
+                        price = console.nextInt();
+
+                        /*third step*/
+                        if (validateNumber(price)) {
+                            part.setPrice(price);
+                        } else {
+                            errorMessage = "Цена указана не верно";
+                        }
+                    } else {
+                        errorMessage = "Наименование производителя не корректно";
                     }
+
+                } else {
+                    errorMessage = "Название не корректно";
                 }
-
             }
 
-            else console.close();
-
-
-            parts.addPart(new Part(Part.name, Part.brand, Part.price));
-
-
-            String price2 = Integer.toString(Part.price);
-            ArrayList<String> toDataBase = new ArrayList(Arrays.asList(Part.name, Part.brand, price2));
-
-
-            Path path = Path.of("readme.txt");
-
-            try {
-                if (!parts.equals(Path.of("readme.txt"))) {
-                    Files.createFile(path);
-                }
-
-
-            } catch (IOException e) {
-                System.out.println("Skynet is broucken!!! call 911");
-
+            /*если есть ошибка, то выводим сообщение и завершаем метод*/
+            if (errorMessage != null) {
+                System.out.println(errorMessage);
+            } else {
+                System.out.println("Ваши данные успешно внесены.");
+                parts.add(part);
             }
-            try {
-                Files.write(path, toDataBase, StandardOpenOption.WRITE);
-            } catch (IOException e) {
-                e.printStackTrace();
+
+        } while (!userInput.equals(x));
+
+
+        /*time to save to file*/
+        Path path = Path.of("parts_catalog.txt");
+
+        try {
+            if (!Files.exists(path)) {
+                Files.createFile(path);
             }
+
+        } catch (IOException e) {
+            System.out.println("Не удалось создать файл!");
+            return;
 
         }
+
+        List<String> partsAsString =
+                parts.stream()
+                        .map(Part::toString)
+                        .collect(Collectors.toList());
+
+        try {
+            Files.write(path, partsAsString, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Ваши данные сохранены в файл.");
+
     }
 
-            class Part {
-               public static String name;
-               public static String brand;
-               public static int price;
+    /**
+     * Метод проверяет строку
+     * 1. Ссылка не должна быть null
+     * 2. Строка должна содержать более 3х символов
+     */
+    private static boolean validateString(String stringToCheck) {
 
-                public Part(String name, String brand, int price) {
-                    this.name = name;
-                    this.brand = brand;
-                    this.price = price;
-                }
+        boolean partNameIsNotNull = stringToCheck != null;
+        boolean partNameIsNotEmpty = !stringToCheck.isEmpty();
+        boolean partNameLengthIsOk = stringToCheck.length() > 3;
 
-            }
+        return partNameIsNotNull && partNameIsNotEmpty && partNameLengthIsOk;
+    }
+
+    private static boolean validateNumber(int numberToValidate) {
+        return numberToValidate > 0 && numberToValidate < 1_000_000;
+    }
+}
+
+@Setter
+@ToString
+class Part {
+
+    public String name;
+    public String brand;
+    public int price;
+
+    public Part() {
+
+    }
+
+    public Part(String name, String brand, int price) {
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+    }
+}
 
 
-            class Parts {
-                public List<Part> baseParts = new ArrayList<>();
-
-                public void addPart(Part part) {
-                    if (!part.equals(null)) {
-                        baseParts.add(part);
-                    }
-                }
-
-            }
