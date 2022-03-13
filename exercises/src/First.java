@@ -20,6 +20,7 @@ public class First {
         /*мы хотим преобразовать List<String> в List<Integer>*/
         List<Integer> integers =
                 strings.stream()
+                        .filter(onlyEvenNumbers)
                         .map(stringToInteger) /*такой ссылки у нас нет, нужно ее создать, что бы компилятор не ругался*/
                         .collect(Collectors.toList());
 
