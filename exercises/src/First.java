@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,6 +14,8 @@ public class First {
 
         /*Есть коллекция*/
         List<String> strings = Stream.of("1", "2", "3").collect(Collectors.toList());
+
+        Function<String, Integer> stringToInteger = Integer::valueOf;
 
         /*мы хотим преобразовать List<String> в List<Integer>*/
         List<Integer> integers =
