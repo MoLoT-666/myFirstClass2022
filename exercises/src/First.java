@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,9 +17,11 @@ public class First {
         List<String> strings = Stream.of("1", "2", "3").collect(Collectors.toList());
 
         Function<String, Integer> stringToInteger = Integer::valueOf;
+        
+        Predicate<String> onlyEvenNumbers = First::test;
 
         /*мы хотим преобразовать List<String> в List<Integer>*/
-        List<Integer> integers =
+               List<Integer> integers =
                 strings.stream()
                         .filter(onlyEvenNumbers)
                         .map(stringToInteger) /*такой ссылки у нас нет, нужно ее создать, что бы компилятор не ругался*/
@@ -28,4 +31,11 @@ public class First {
 
     }
 
+    private static boolean test(String s) {
+        Integer x = Integer.valueOf(s);
+        if (x % 2 == 0) {
+        return true;
+        }
+        return false;
+    }
 }
