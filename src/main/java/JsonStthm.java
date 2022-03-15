@@ -1,4 +1,5 @@
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,9 @@ public class JsonStthm {
 
         String jsonCat = gson.toJson(myCat);
         System.out.println("json string: " + jsonCat);
+
+        /*do it with jackson*/
+        ObjectMapper objectMapper = new ObjectMapper();
 
     }
 
