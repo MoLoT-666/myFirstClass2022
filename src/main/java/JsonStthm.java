@@ -1,4 +1,6 @@
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +8,7 @@ import lombok.Setter;
 
 public class JsonStthm {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
 
         Cat myCat = new Cat();
         myCat.setName("Germes");
@@ -16,9 +18,14 @@ public class JsonStthm {
         Gson gson = new Gson();
 
         String jsonCat = gson.toJson(myCat);
-        System.out.println("json string: " + jsonCat);
+        System.out.println("JSON string with gson libraries: " + jsonCat);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonCat2 = objectMapper.writeValueAsString(myCat);
+        System.out.println("JSON string with jackson libraries: " + jsonCat2);
 
     }
+
 
 }
 @Getter
