@@ -34,7 +34,7 @@ public class NewShopWithStream {
 
             List<Tool> toolYoyNeed = shopAutopars.inStok.stream()
                     .filter(tool -> tool.nameTool.equals(bill.findTool))
-                    .toList();
+                    .collect(Collectors.toList());
 
 
             List<Tool> bestPriceInFierst = toolYoyNeed.stream()
